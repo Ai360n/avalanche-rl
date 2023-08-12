@@ -21,7 +21,7 @@ default_dqn_logger = RLEvaluationPlugin(
         emit_on=['after_rollout']),
     loggers=default_rl_logger.loggers)
 
-
+# it needs to add clock attribute for EWC.
 class DQNStrategy(RLBaseStrategy):
     def __init__(
             self, model: DQNModel, optimizer: Optimizer,
