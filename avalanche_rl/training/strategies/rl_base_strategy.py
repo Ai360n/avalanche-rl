@@ -147,10 +147,10 @@ class RLBaseStrategy(BaseTemplate):
         self.eval_episodes = eval_episodes
         self.max_grad_norm = max_grad_norm
         # TODO: support Clock?
-        for i in range(len(self.plugins)):
-            if isinstance(self.plugins[i], Clock):
-                self.plugins.pop(i)
-                break
+        #for i in range(len(self.plugins)):
+            #if isinstance(self.plugins[i], Clock):
+                #self.plugins.pop(i)
+                #break
         
         self.optimizer = optimizer
         self._criterion = criterion
@@ -161,11 +161,16 @@ class RLBaseStrategy(BaseTemplate):
             evaluator = EvaluationPlugin()
         self.plugins.append(evaluator)
         self.evaluator = evaluator
-
+        
         self.training_exp_counter = 0
         """ Counts the number of training steps. +1 at the end of each 
         experience. """
-
+                
+        self.clock = Clock()
+        """ Incremental counters for strategy events. """
+        # WARNING: Clock needs to be the last plugin, otherwise
+        # counters will be wrong for plugins called after it.
+        self.plugins.append(self.clock)
     @property
     def current_experience_steps(self) -> Timestep:
         """
